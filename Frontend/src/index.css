@@ -1,0 +1,41 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* App Container */
+.App {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+/* Headings */
+h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+}
+
+/* Timeline Component (optional global tweaks) */
+.timeline {
+  margin: 0 auto;
+}
+
+.timeline-item {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.timeline-item:hover {
+  transform: translateY(-3px);
+  opacity: 0.9;
+}
