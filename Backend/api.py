@@ -3,56 +3,16 @@ import requests
 from fastapi import FastAPI, Query
 from pydantic import BaseModel
 from psycopg2.extras import RealDictCursor
-from db_connection import get_connection
+from .db_connection import get_connection
 from urllib.parse import quote
 from shapely.geometry import LineString
+from .middleware import add_cors_middleware
+
 
 app = FastAPI(title="Road Conditions API")
+add_cors_middleware(app)
 
-@app.get("/stations")
-def  get_all_stations():
-    conn = get_connection()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("SELECT * FROM stations ORDER BY id")
-    rows = cur.fetchall()
-    cur.close()
-    conn.close()
-
-    if len(rows) == 0:
-        return {"message": f"No stations found"}
-
-    return rows
-
-@app.get("/stations/{station_id}")
-def get_station(station_id : int):
-    conn = get_connection()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("SELECT * FROM stations WHERE id = %s;", (station_id, ))
-    rows = cur.fetchall()
-    cur.close()
-    conn.close()
-
-    if len(rows) == 0:
-        return {"message": f"No station found with id {station_id}"}
-
-    return rows
-
-@app.get("/stations/{station_id}/weather")
-def get_station_weather(station_id : int):
-    conn = get_connection()
-    cur = conn.cursor(cursor_factory=RealDictCursor)
-    cur.execute("SELECT * FROM weather_data WHERE station_id = %s;", (station_id, ))
-    rows = cur.fetchall()
-    cur.close()
-    conn.close()
-
-    if len(rows) == 0:
-        return {"message": f"No station or weather data found"}
-
-    return rows
-
-
-@app.get("/stations/find/onpath")
+@app.get("/cameras/onpath")
 def get_stations_on_path(
     start_address: str = Query(),
     end_address: str = Query(),
@@ -83,13 +43,13 @@ def get_stations_on_path(
 
     line = LineString(path_coordinates_latlon)
     line_wkt = line.wkt
-    distance_m = 1000
+    distance_m = 50
 
     conn = get_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
     query = """
     SELECT *
-    FROM stations
+    FROM cameras
     WHERE ST_DWithin(
         geom,
         geography(ST_GeomFromText(%s, 4326)),
@@ -107,4 +67,15 @@ def get_stations_on_path(
 
     return rows
 
-#http://127.0.0.1:8000/stations/find/onpath?start_address=Helsinki&end_address=Tampere
+
+@app.get("/cameras/weather/{camera_geom}")
+def get_camera_weather(camera_geom):
+    conn = get_connection()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    cur.execute("SELECT id FROM stations ORDER BY geom <-> %s LIMIT 1;", (camera_geom, ))
+    response = cur.fetchone()
+    weather_station_id = response["id"]
+    
+    cur.execute("SELECT * FROM weather_data WHERE station_id = %s", (weather_station_id, ))
+    weather_data = cur.fetchall()
+    return weather_data

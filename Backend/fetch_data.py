@@ -24,6 +24,31 @@ def fetch_station_data():
         cur.close()
         conn.close()
 
+def fetch_camera_data():
+    url ="https://tie.digitraffic.fi/api/weathercam/v1/stations"
+    response = requests.get(url)
+    data = response.json()
+
+    if response.status_code == 200:
+        conn = get_connection()
+        cur = conn.cursor()
+
+        for camera in data["features"]:
+            camera_id = camera["id"]
+            lon, lat, _ = camera["geometry"]["coordinates"]
+            camera_name = camera["properties"]["name"]
+            preset_id = camera["properties"]["presets"][0]["id"]
+
+            cur.execute("""
+                INSERT INTO cameras (camera_id, preset_id, camera_name, geom)
+                VALUES (%s, %s, %s, ST_SetSRID(ST_MakePoint(%s, %s), 4326))
+            """, (camera_id, preset_id, camera_name, lon, lat))
+            
+        conn.commit()
+        cur.close()
+        conn.close()
+
+
 def fetch_weather_data():
     url = "https://tie.digitraffic.fi/api/weather/v1/stations/data"
     response = requests.get(url)
@@ -47,6 +72,5 @@ def fetch_weather_data():
         conn.commit()
         cur.close()
         conn.close()
-
 
 
