@@ -57,13 +57,15 @@ def fetch_weather_data():
     if response.status_code == 200:
         conn = get_connection()
         cur = conn.cursor()
+        cur.execute("DELETE FROM weather_data;")
+
         wanted_sensors = [1, 3, 16, 22, 23, 25, 26, 52, 177, 178, 179]
 
         for station in data["stations"]:
             station_id = station["id"] 
             filtered_sensors = [s for s in station["sensorValues"] if s["id"] in wanted_sensors]
             values = {s["id"]: s["value"] for s in filtered_sensors}
-            
+
             cur.execute("""
                 INSERT INTO weather_data (station_id, air_temp_c, road_temp_c, avg_wind_ms, rain_state, rain_mm_per_h, rain_type, visibility_km, salt_amount_gm2, water_on_road_mm, snow_on_road_mm, ice_on_road_mm)
                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
@@ -74,3 +76,4 @@ def fetch_weather_data():
         conn.close()
 
 
+fetch_weather_data()

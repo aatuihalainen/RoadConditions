@@ -1,5 +1,5 @@
 import React from "react";
-import CameraWeather from "./components/CameraWeather";
+import CameraWeather from "./components/cameraWeather";
 
 const App: React.FC = () => {
   return (
