@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import { getCamerasOnPath, getCameraWeather } from "../api/cameras";
+import { formatData } from "../utils/formatData";
+import "../css/cameraWeather.css"
+import { getWarnings } from "../utils/getWarnings";
+import { getBallColor } from "../utils/getWarnings";
 
 interface Camera {
-  id: number;
+  id: string;
   geom: string;
   camera_name?: string;
 }
@@ -14,20 +18,14 @@ const CameraWeather: React.FC = () => {
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const [openStation, setOpenStation] = useState<number | null>(null);
+
   const handleSearch = async () => {
     try {
       setLoading(true);
       setData([]);
 
       const cameras: Camera[] = await getCamerasOnPath(start, end);
-
-      /*
-      cameras.forEach((camera) => {
-        if (camera.camera_name) {
-          camera.camera_name = formatCameraName(camera.camera_name);
-        }
-      });
-      */
 
       const weatherPromises = cameras.map(async (camera) => {
         const weather = await getCameraWeather(camera.geom);
@@ -44,49 +42,84 @@ const CameraWeather: React.FC = () => {
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <div>
+ <div className="camera-weather-container">
+      <div className="search-container">
         <input
-          className="border p-2 mr-2"
-          placeholder="Start address"
+          placeholder="Lähtöpiste"
           value={start}
           onChange={(e) => setStart(e.target.value)}
         />
         <input
-          className="border p-2 mr-2"
-          placeholder="End address"
+          placeholder="Määränpää"
           value={end}
           onChange={(e) => setEnd(e.target.value)}
         />
-        <button
-          className="bg-blue-600 text-white px-4 py-2 rounded"
-          onClick={handleSearch}
-          disabled={loading}
-        >
+        <button onClick={handleSearch} disabled={loading}>
           {loading ? "Loading..." : "Search"}
         </button>
       </div>
-
-      {data.map((camera, idx) => (
-        <div key={idx} className="border p-2 rounded shadow">
-          <h3 className="font-semibold">{camera.camera_name ?? camera.camera_id}</h3>
-          {camera.weather && (
-            <div className="mt-2 text-sm">
-              <p><strong>Air Temperature:</strong> {camera.weather[0].air_temp_c ?? "N/A"} c</p>
-              <p><strong>Road Temperature:</strong> {camera.weather[0].road_temp_c ?? "N/A"} c</p>
-              <p><strong>Avg Wind Speed:</strong> {camera.weather[0].avg_wind_ms ?? "N/A"} m/s</p>
-              <p><strong>Rain state:</strong> {camera.weather[0].rain_state ?? "N/A"}</p>
-              <p><strong>Rain amount:</strong> {camera.weather[0].rain_mm_per_h ?? "N/A"} mm/h</p>
-              <p><strong>Rain Type:</strong> {camera.weather[0].rain_type ?? "N/A"}</p>
-              <p><strong>Visibility:</strong> {camera.weather[0].visibility_km ?? "N/A"} km</p>
-              <p><strong>Salt Amount:</strong> {camera.weather[0].salt_amount_gm2 ?? "N/A"} g/m2</p>
-              <p><strong>Water on road:</strong> {camera.weather[0].water_on_road_mm ?? "N/A"} mm</p>
-              <p><strong>Snow on road:</strong> {camera.weather[0].snow_on_road_mm ?? "N/A"} mm</p>
-              <p><strong>Ice on road:</strong> {camera.weather[0].ice_on_road_mm ?? "N/A"} mm</p>
+      
+      {data && data.length > 0 &&(
+        <div className="timeline-container">
+        <div className="timeline-line"></div>
+          <div className="station-item station-item-start-end">
+            <div className="timeline-ball timeline-ball-start-end"></div>
+            <div className="station-content">
+              <h3>LÄHTÖ: {start.toUpperCase()}</h3>
             </div>
-          )}
+          </div>
+        
+        <div className="stations">
+          {data
+          .sort((a, b) => a.distance_along_route - b.distance_along_route)
+          .map((camera, idx) => {
+            const formatted = formatData(camera);
+            const warnings = getWarnings(formatted);
+            const isOpen = openStation === idx;
+
+            return (
+              <div key={idx} className="station-item">
+                <div className="timeline-ball" style={{backgroundColor:getBallColor(warnings)}}></div>
+                <div className="timeline-distance">{formatted.distance_along_route} Km</div>
+
+                <div className="station-content">
+                  <h3
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      setOpenStation(isOpen ? null : idx)
+                    }
+                  >
+                    {formatted.name ?? formatted.id}
+                  </h3>
+
+                  {camera.weather && isOpen && (
+                    <div className="weather-details">
+                      <p><strong>Air Temperature:</strong> {formatted.weather[0].air_temp_c} °C</p>
+                      <p><strong>Road Temperature:</strong> {formatted.weather[0].road_temp_c} °C</p>
+                      <p><strong>Avg Wind Speed:</strong> {formatted.weather[0].avg_wind_ms} m/s</p>
+                      <p><strong>Rain state:</strong> {formatted.weather[0].rain_state}</p>
+                      <p><strong>Rain amount:</strong> {formatted.weather[0].rain_mm_per_h} mm/h</p>
+                      <p><strong>Visibility:</strong> {formatted.weather[0].visibility_km} km</p>
+                      <p><strong>Salt Amount:</strong> {formatted.weather[0].salt_amount_gm2} g/m²</p>
+                      <p><strong>Water on road:</strong> {formatted.weather[0].water_on_road_mm} mm</p>
+                      <p><strong>Snow on road:</strong> {formatted.weather[0].snow_on_road_mm} mm</p>
+                      <p><strong>Ice on road:</strong> {formatted.weather[0].ice_on_road_mm} mm</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
-      ))}
+        <div className="station-item station-item-start-end">
+            <div className="timeline-ball timeline-ball-start-end"></div>
+            <div className="station-content">
+              <h3>KOHDE: {end.toUpperCase()}</h3>
+            </div>
+          </div>
+      </div>
+      )}
+
     </div>
   );
 };

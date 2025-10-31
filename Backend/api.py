@@ -48,13 +48,26 @@ def get_stations_on_path(
     conn = get_connection()
     cur = conn.cursor(cursor_factory=RealDictCursor)
     query = """
-    SELECT *
-    FROM cameras
-    WHERE ST_DWithin(
-        geom,
-        geography(ST_GeomFromText(%s, 4326)),
-        %s
-    );
+        SELECT
+            c.*,
+            ST_LineLocatePoint(route.geom, c.geom) AS fraction_along_route,
+            ST_Length(
+                ST_LineSubstring(
+                    route.geom,
+                    0,
+                    ST_LineLocatePoint(route.geom, c.geom)
+                )::geography
+            ) AS distance_along_route
+        FROM cameras c
+        CROSS JOIN (
+            SELECT ST_GeomFromText(%s, 4326) AS geom
+        ) AS route
+        WHERE ST_DWithin(
+            c.geom::geography,
+            route.geom::geography,
+            %s
+        )
+        ORDER BY distance_along_route ASC;
     """
 
     cur.execute(query, (line_wkt, distance_m))

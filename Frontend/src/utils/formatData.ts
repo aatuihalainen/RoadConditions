@@ -16,32 +16,33 @@ interface Camera{
     id: number;
     camera_name: string;
     geom: string;
+    distance_along_route: number;
     weather: WeatherData[];
 }
 
-function formatRainState(state: number){
+function formatRainState(state: number, type: number){
     switch (state){
         case 0:
             return "Poutaa";
         case 1:
-            return "Heikkoa sadetta";
+            return "Heikkoa " + formatRainType(type) + "sadetta";         
         case 2:
-            return "Kohtalaista sadetta";
+            return "Kohtalaista " + formatRainType(type) + "sadetta";
         case 3:
-            return "Rankkaa sadetta";
+            return "Rankkaa " + formatRainType(type) + "sadetta";
+        default:
+            return "-";
     }
 }
 
 function formatRainType(type: number){
      switch (type){
-        case 0:
+        case 10:
             return "vesi";
-        case 1:
+        case 9:
+            return "tihku";
+        case 8:
             return "lumi";
-        case 2:
-            return "räntä";
-        case 3:
-            return "rae";
     }
 }
 
@@ -62,20 +63,20 @@ export const formatData = (camera: any) => {
             air_temp_c: w.air_temp_c != null ? w.air_temp_c.toFixed(1): "-",
             road_temp_c: w.road_temp_c != null ? w.road_temp_c.toFixed(1): "-",
             avg_wind_ms: w.avg_wind_ms != null ? w.avg_wind_ms.toFixed(1): "-",
-            rain_state: w.rain_state != null ? formatRainState(w.rain_state): "-",
+            rain_state: w.rain_state != null ? formatRainState(Math.round(w.rain_state), Math.round(w.rain_type)): "-",
             rain_mm_per_h: w.rain_mm_per_h != null ? w.rain_mm_per_h.toFixed(1): "-",
-            rain_type: w.rain_type != null ? formatRainType(w.rain_type): "-",
             visibility_km: w.visibility_km != null ? w.avg_wind_ms.toFixed(1) : "-",
-            salt_amoung_gm2: w.salt_amoung_gm2 != null ? w.salt_amoung_gm2.toFixed(2): "-",
+            salt_amount_gm2: w.salt_amoung_gm2 != null ? w.salt_amoung_gm2.toFixed(2): "-",
             water_on_road_mm: w.water_on_road_mm != null ? w.water_on_road_mm.toFixed(2): "-",
             snow_on_road_mm: w.snow_on_road_mm  != null ? w.snow_on_road_mm.toFixed(2): "-",
             ice_on_road_mm: w.ice_on_road_mm != null ? w.ice_on_road_mm.toFixed(2): "-"
         })) ?? [];
-
+        
     return {
         id: camera.id,
         name: formatCameraName(camera.camera_name),
         geom: camera.geom,
+        distance_along_route: Math.round(camera.distance_along_route / 1000),
         weather: formattedData,
     };
 };

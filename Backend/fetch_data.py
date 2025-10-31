@@ -9,6 +9,7 @@ def fetch_station_data():
     if response.status_code == 200:
         conn = get_connection()
         cur = conn.cursor()
+        cur.execute("DELETE FROM stations;")
 
         for feature in data["features"]:
             station_id = feature["id"]
@@ -32,6 +33,7 @@ def fetch_camera_data():
     if response.status_code == 200:
         conn = get_connection()
         cur = conn.cursor()
+        cur.execute("DELETE from cameras;")
 
         for camera in data["features"]:
             camera_id = camera["id"]
