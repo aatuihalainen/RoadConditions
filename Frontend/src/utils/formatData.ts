@@ -65,7 +65,7 @@ export const formatData = (camera: any) => {
             avg_wind_ms: w.avg_wind_ms != null ? w.avg_wind_ms.toFixed(1): "-",
             rain_state: w.rain_state != null ? formatRainState(Math.round(w.rain_state), Math.round(w.rain_type)): "-",
             rain_mm_per_h: w.rain_mm_per_h != null ? w.rain_mm_per_h.toFixed(1): "-",
-            visibility_km: w.visibility_km != null ? w.avg_wind_ms.toFixed(1) : "-",
+            visibility_km: w.visibility_km != null ? w.visibility_km.toFixed(1) : "-",
             salt_amount_gm2: w.salt_amoung_gm2 != null ? w.salt_amoung_gm2.toFixed(2): "-",
             water_on_road_mm: w.water_on_road_mm != null ? w.water_on_road_mm.toFixed(2): "-",
             snow_on_road_mm: w.snow_on_road_mm  != null ? w.snow_on_road_mm.toFixed(2): "-",

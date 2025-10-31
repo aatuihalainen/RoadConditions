@@ -1,4 +1,7 @@
-const now: Date = new Date();
+const today: Date = new Date();
+const year = today.getFullYear();
+const winterStart = new Date(year, 10, 1);
+const WinterEnd = new Date(year, 3, 30);
 
 interface Warning {
   name: string;
@@ -7,13 +10,23 @@ interface Warning {
 }
 
 function checkRoadTemp(roadTemp: any, warnings: Warning[]){
-    if (roadTemp <= 2){
+    if (roadTemp < 0 && (today < winterStart && today > WinterEnd )){
+        warnings.push({name: "Jäätymisvaroitus", severity: 2, warningText: "Tienpinnan lämpötila nollan alapuolella"});
+    }
+
+    else if (roadTemp < 2 && (today < winterStart && today > WinterEnd )){
         warnings.push({name: "Jäätymisvaroitus", severity: 1, warningText: "Tienpinnan lämpötila alle 2 astetta"});
     }
 }
 
 function checkAvGWind(avgWind: any, warnings: Warning[]){
+    if (avgWind > 10){
+        warnings.push({name: "Tuulivaroitus", severity: 2, warningText: "Tuulen keskinopeus yli 10m/s"});
+    }
 
+    else if(avgWind > 5){
+        warnings.push({name: "Tuulivaroitus", severity: 1, warningText: "Tuulen keskinopeus yli 5m/s"});
+    }
 }
 
 function checkRainState(rainState: any, warnings: Warning[]){
@@ -21,17 +34,23 @@ function checkRainState(rainState: any, warnings: Warning[]){
 }
 
 function checkVisibility(visibility: any, warnings: Warning[]){
-    if (visibility < 0.5){
-        warnings.push({name: "Näkyvyysvaroitus", severity: 2, warningText: "Näkyvyys alle 500m"});
+    if (visibility <= 0.2){
+        warnings.push({name: "Näkyvyysvaroitus", severity: 2, warningText: "Näkyvyys alle 200m"});
     }
 
-    else if(visibility < 1){
-        warnings.push({name: "Näkyvyysvaroitus", severity: 1, warningText: "Näkyvyys alle 1km"});
+    else if(visibility <= 0.5){
+        warnings.push({name: "Näkyvyysvaroitus", severity: 1, warningText: "Näkyvyys alle 500m"});
     }
 }
 
 function checkWaterOnRoad(waterOnRoad: any, warnings: Warning[]){
-
+    if (waterOnRoad > 1){
+        warnings.push({name: "Vesivaroitus", severity: 2, warningText: "Tienpinnalla vettä yli 1mm"});
+    }
+    
+    else if (waterOnRoad > 0.5){
+        warnings.push({name: "Vesivaroitus", severity: 2, warningText: "Tienpinnalla vettä yli 0.5mm"});
+    }
 }
 
 function checkSnowOnRoad(snowOnRoad: any, warnings: Warning[]){
@@ -45,7 +64,9 @@ function checkSnowOnRoad(snowOnRoad: any, warnings: Warning[]){
 }
 
 function checkIceOnRoad(iceOnRoad: any, warnings: Warning[]){
-
+    if (iceOnRoad > 0 && (today < winterStart && today > WinterEnd)){
+        warnings.push({name: "Jäävaroitus", severity: 2, warningText: "Tienpinnalla on jäätä"});
+    }
 }
 
 export const getWarnings = (data: any): Warning[] => {

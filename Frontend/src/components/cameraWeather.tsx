@@ -55,7 +55,7 @@ const CameraWeather: React.FC = () => {
           onChange={(e) => setEnd(e.target.value)}
         />
         <button onClick={handleSearch} disabled={loading}>
-          {loading ? "Loading..." : "Search"}
+          {loading ? "Haetaan..." : "Hae"}
         </button>
       </div>
       
@@ -78,19 +78,23 @@ const CameraWeather: React.FC = () => {
             const isOpen = openStation === idx;
 
             return (
-              <div key={idx} className="station-item">
+              <div key={idx} className="station-item" 
+                    style={{ cursor: "pointer" }}
+                    onClick={() =>
+                      setOpenStation(isOpen ? null : idx)
+                    }>
                 <div className="timeline-ball" style={{backgroundColor:getBallColor(warnings)}}></div>
                 <div className="timeline-distance">{formatted.distance_along_route} Km</div>
 
                 <div className="station-content">
-                  <h3
-                    style={{ cursor: "pointer" }}
-                    onClick={() =>
-                      setOpenStation(isOpen ? null : idx)
-                    }
-                  >
+                  <h3>
                     {formatted.name ?? formatted.id}
                   </h3>
+                  {warnings.map((warning) => {
+                    return <ul><li className="warning" style={{color: warning.severity == 1 ? "#c5ad23ff" :
+                       warning.severity == 2 ? "#f4420b" : "white"}}
+                       >{warning.name} : {warning.warningText}</li></ul>
+                  })}
 
                   {camera.weather && isOpen && (
                     <div className="weather-details">
