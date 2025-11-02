@@ -44,12 +44,12 @@ function checkVisibility(visibility: any, warnings: Warning[]){
 }
 
 function checkWaterOnRoad(waterOnRoad: any, warnings: Warning[]){
-    if (waterOnRoad > 1){
-        warnings.push({name: "Vesivaroitus", severity: 2, warningText: "Tienpinnalla vettä yli 1mm"});
+    if (waterOnRoad > 2){
+        warnings.push({name: "Vesivaroitus", severity: 2, warningText: "Tienpinnalla vettä yli 2mm"});
     }
     
-    else if (waterOnRoad > 0.5){
-        warnings.push({name: "Vesivaroitus", severity: 2, warningText: "Tienpinnalla vettä yli 0.5mm"});
+    else if (waterOnRoad > 1){
+        warnings.push({name: "Vesivaroitus", severity: 1, warningText: "Tienpinnalla vettä yli 1mm"});
     }
 }
 

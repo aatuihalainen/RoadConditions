@@ -76,6 +76,7 @@ export const formatData = (camera: any) => {
         id: camera.id,
         name: formatCameraName(camera.camera_name),
         geom: camera.geom,
+        preset: camera.preset_id,
         distance_along_route: Math.round(camera.distance_along_route / 1000),
         weather: formattedData,
     };

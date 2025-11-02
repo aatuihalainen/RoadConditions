@@ -91,19 +91,51 @@
   font-weight: 600;
 }
 
+.station-details{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
 .station-content .weather-details {
   font-size: 14px;
-  line-height: 1.4;
+  line-height: 2;
 }
 
 .weather-details {
-  font-size: 14px;
   line-height: 1.4;
-  margin-top: 8px;
   transition: max-height 0.3s ease;
   overflow: hidden;
+  border: 2px solid #dadada;
+  border-radius: 10px;
+  padding: 20px 3%;
+  min-height: 100%;
+  margin-bottom: 5px;
+}
+
+.weather-details h4{
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-bottom: 1px solid #acacac;
+  width: fit-content;
+  margin-bottom: 10px;
+}
+
+.weather-details p{
+  font-size: 14px;
 }
 
 .warning{
   margin-left: 20px;
+}
+
+.weather-camera{
+  width: 70%;
+}
+
+.weather-camera img{
+  width: 100%;
+  border-radius: 10px;
+  aspect-ratio: 16 / 9;
 }

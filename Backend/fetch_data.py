@@ -1,5 +1,5 @@
 import requests
-from db_connection import get_connection
+from .db_connection import get_connection
 
 def fetch_station_data():
     url ="https://tie.digitraffic.fi/api/weather/v1/stations"
@@ -77,5 +77,3 @@ def fetch_weather_data():
         cur.close()
         conn.close()
 
-
-fetch_weather_data()

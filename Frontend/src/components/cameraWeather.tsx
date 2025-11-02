@@ -97,17 +97,23 @@ const CameraWeather: React.FC = () => {
                   })}
 
                   {camera.weather && isOpen && (
-                    <div className="weather-details">
-                      <p><strong>Air Temperature:</strong> {formatted.weather[0].air_temp_c} °C</p>
-                      <p><strong>Road Temperature:</strong> {formatted.weather[0].road_temp_c} °C</p>
-                      <p><strong>Avg Wind Speed:</strong> {formatted.weather[0].avg_wind_ms} m/s</p>
-                      <p><strong>Rain state:</strong> {formatted.weather[0].rain_state}</p>
-                      <p><strong>Rain amount:</strong> {formatted.weather[0].rain_mm_per_h} mm/h</p>
-                      <p><strong>Visibility:</strong> {formatted.weather[0].visibility_km} km</p>
-                      <p><strong>Salt Amount:</strong> {formatted.weather[0].salt_amount_gm2} g/m²</p>
-                      <p><strong>Water on road:</strong> {formatted.weather[0].water_on_road_mm} mm</p>
-                      <p><strong>Snow on road:</strong> {formatted.weather[0].snow_on_road_mm} mm</p>
-                      <p><strong>Ice on road:</strong> {formatted.weather[0].ice_on_road_mm} mm</p>
+                    <div className="station-details">
+                      <div className="weather-details">
+                        <h4>Sääolosuhteet</h4>
+                        <p><strong>Ilman lämpötila:</strong> {formatted.weather[0].air_temp_c} °C</p>
+                        <p><strong>Tienpinnan lämpötila:</strong> {formatted.weather[0].road_temp_c} °C</p>
+                        <p><strong>Tuulen keskinopeus:</strong> {formatted.weather[0].avg_wind_ms} m/s</p>
+                        <p><strong>Näkyvyys:</strong> {formatted.weather[0].visibility_km} km</p>
+                        <p><strong>Sadetilanne:</strong> {formatted.weather[0].rain_state}</p>
+                        <p><strong>Sadekertymä:</strong> {formatted.weather[0].rain_mm_per_h} mm/h</p>
+                        <p><strong>Vettä tienpinnalla:</strong> {formatted.weather[0].water_on_road_mm} mm</p>
+                        <p><strong>Jäätä tienpinnalla:</strong> {formatted.weather[0].ice_on_road_mm} mm</p>
+                        <p><strong>Lunta tienpinnalla:</strong> {formatted.weather[0].snow_on_road_mm} mm</p>
+                        <p><strong>Suolan määrä tienpinnalla:</strong> {formatted.weather[0].salt_amount_gm2} g/m²</p>
+                      </div>
+                      <div className="weather-camera">
+                        <img src={isOpen ? "https://weathercam.digitraffic.fi/" + formatted.preset + ".jpg" : undefined} loading="lazy" alt="Kelikamerakuva"/>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -123,7 +129,6 @@ const CameraWeather: React.FC = () => {
           </div>
       </div>
       )}
-
     </div>
   );
 };
