@@ -29,10 +29,6 @@ function checkAvGWind(avgWind: any, warnings: Warning[]){
     }
 }
 
-function checkRainState(rainState: any, warnings: Warning[]){
-
-}
-
 function checkVisibility(visibility: any, warnings: Warning[]){
     if (visibility <= 0.2){
         warnings.push({name: "Näkyvyysvaroitus", severity: 2, warningText: "Näkyvyys alle 200m"});
@@ -74,7 +70,6 @@ export const getWarnings = (data: any): Warning[] => {
     const weather = data.weather[0];
     checkRoadTemp(weather.road_temp_c, warnings);
     checkAvGWind(weather.avg_wind_ms, warnings);
-    checkRainState(weather.rain_state, warnings);
     checkVisibility(weather.visibility_km, warnings);
     checkWaterOnRoad(weather.water_on_road_mm, warnings);
     checkSnowOnRoad(weather.snow_on_road_mm, warnings);

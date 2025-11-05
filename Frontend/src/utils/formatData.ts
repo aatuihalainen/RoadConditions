@@ -25,11 +25,11 @@ function formatRainState(state: number, type: number){
         case 0:
             return "Poutaa";
         case 1:
-            return "Heikkoa " + formatRainType(type) + "sadetta";         
+            return "Heikkoa " + (formatRainType(type) ?? "") + "sadetta";         
         case 2:
-            return "Kohtalaista " + formatRainType(type) + "sadetta";
+            return "Kohtalaista " + (formatRainType(type) ?? "") + "sadetta";
         case 3:
-            return "Rankkaa " + formatRainType(type) + "sadetta";
+            return "Rankkaa " + (formatRainType(type) ?? "") + "sadetta";
         default:
             return "-";
     }

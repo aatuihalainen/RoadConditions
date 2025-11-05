@@ -13,8 +13,8 @@ interface Camera {
 
 
 const CameraWeather: React.FC = () => {
-  const [start, setStart] = useState("");
-  const [end, setEnd] = useState("");
+  let [start, setStart] = useState("");
+  let [end, setEnd] = useState("");
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -24,6 +24,9 @@ const CameraWeather: React.FC = () => {
     try {
       setLoading(true);
       setData([]);
+
+      start = start.replace(/([a-zA-Z])(\d)|(\d)([a-zA-Z])/g, '$1$3 $2$4') + " finland"
+      end = end.replace(/([a-zA-Z])(\d)|(\d)([a-zA-Z])/g, '$1$3 $2$4') + " finland"
 
       const cameras: Camera[] = await getCamerasOnPath(start, end);
 
@@ -65,7 +68,7 @@ const CameraWeather: React.FC = () => {
           <div className="station-item station-item-start-end">
             <div className="timeline-ball timeline-ball-start-end"></div>
             <div className="station-content">
-              <h3>LÄHTÖ: {start.toUpperCase()}</h3>
+              <h3>LÄHTÖ: {start.replace(/([a-zA-Z])(\d)|(\d)([a-zA-Z])/g, '$1$3 $2$4').toUpperCase()}</h3>
             </div>
           </div>
         
@@ -124,7 +127,7 @@ const CameraWeather: React.FC = () => {
         <div className="station-item station-item-start-end">
             <div className="timeline-ball timeline-ball-start-end"></div>
             <div className="station-content">
-              <h3>KOHDE: {end.toUpperCase()}</h3>
+              <h3>KOHDE: {end.replace(/([a-zA-Z])(\d)|(\d)([a-zA-Z])/g, '$1$3 $2$4').toUpperCase()}</h3>
             </div>
           </div>
       </div>

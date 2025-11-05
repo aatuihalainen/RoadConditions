@@ -95,15 +95,10 @@
   display: flex;
   justify-content: space-between;
   margin-top: 20px;
-}
-
-.station-content .weather-details {
-  font-size: 14px;
-  line-height: 2;
+  gap: 10px;
 }
 
 .weather-details {
-  line-height: 1.4;
   transition: max-height 0.3s ease;
   overflow: hidden;
   border: 2px solid #dadada;
@@ -111,6 +106,8 @@
   padding: 20px 3%;
   min-height: 100%;
   margin-bottom: 5px;
+  font-size: 14px;
+  line-height: 2;
 }
 
 .weather-details h4{
@@ -138,4 +135,32 @@
   width: 100%;
   border-radius: 10px;
   aspect-ratio: 16 / 9;
+}
+
+/* Changes for responsiveness start here */
+@media (width < 1350px){
+  .weather-details{
+    padding: 10px 1.2%;
+    line-height: 1.9;
+  }
+}
+
+@media (width < 1200px) {
+  .timeline-distance{
+    display: none;
+  }
+
+  .weather-camera{
+    width: 100%;
+  }
+
+  .station-details{
+    flex-direction: column-reverse;
+  }
+}
+
+@media (width < 800px){
+  .search-container{
+    flex-direction: column;
+  }
 }
