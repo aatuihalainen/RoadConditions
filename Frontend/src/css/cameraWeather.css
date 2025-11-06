@@ -137,6 +137,10 @@
   aspect-ratio: 16 / 9;
 }
 
+.error-message{
+  text-align: center;
+}
+
 /* Changes for responsiveness start here */
 @media (width < 1350px){
   .weather-details{

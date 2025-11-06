@@ -1,5 +1,7 @@
 import psycopg2
 import requests
+import time
+import threading
 from fastapi import FastAPI, Query
 from pydantic import BaseModel
 from psycopg2.extras import RealDictCursor
@@ -7,7 +9,9 @@ from .db_connection import get_connection
 from urllib.parse import quote
 from shapely.geometry import LineString
 from .middleware import add_cors_middleware
-
+from .fetch_data import fetch_weather_data
+from .fetch_data import fetch_station_data
+from .fetch_data import fetch_camera_data
 
 app = FastAPI(title="Road Conditions API")
 add_cors_middleware(app)
@@ -92,3 +96,22 @@ def get_camera_weather(camera_geom):
     cur.execute("SELECT * FROM weather_data WHERE station_id = %s", (weather_station_id, ))
     weather_data = cur.fetchall()
     return weather_data
+
+
+fetch_camera_data
+fetch_station_data
+
+def run_data_fetcher():
+    while True:
+        fetch_weather_data()
+        time.sleep(15*60)
+
+thread = threading.Thread(target=run_data_fetcher, daemon=True)
+thread.start()
+
+
+
+
+
+
+

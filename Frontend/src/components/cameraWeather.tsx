@@ -17,6 +17,7 @@ const CameraWeather: React.FC = () => {
   let [end, setEnd] = useState("");
   const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+  let [error, setError] = useState<string | null>(null);
 
   const [openStation, setOpenStation] = useState<number | null>(null);
 
@@ -24,6 +25,7 @@ const CameraWeather: React.FC = () => {
     try {
       setLoading(true);
       setData([]);
+      setError(null)
 
       start = start.replace(/([a-zA-Z])(\d)|(\d)([a-zA-Z])/g, '$1$3 $2$4') + " finland"
       end = end.replace(/([a-zA-Z])(\d)|(\d)([a-zA-Z])/g, '$1$3 $2$4') + " finland"
@@ -38,7 +40,7 @@ const CameraWeather: React.FC = () => {
       const camerasWithWeather = await Promise.all(weatherPromises);
       setData(camerasWithWeather);
     } catch (err) {
-      console.error("Error fetching data:", err);
+      setError("Reitiltäsi ei löytynyt yhtään kelikameraa. Kokeile tarkentaa hakua tai kokeile toista reittiä.")
     } finally {
       setLoading(false);
     }
@@ -62,6 +64,8 @@ const CameraWeather: React.FC = () => {
         </button>
       </div>
       
+      {error && <p className="error-message">{error}</p>}
+
       {data && data.length > 0 &&(
         <div className="timeline-container">
         <div className="timeline-line"></div>
