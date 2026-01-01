@@ -5,7 +5,7 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <h1 className="main-heading">
-        Kelikamerat Ja Säätiedot Reitilläsi
+        Tarkista tieolosuhteet reitilläsi
       </h1>
       <CameraWeather />
     </div>

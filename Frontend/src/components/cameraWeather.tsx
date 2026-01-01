@@ -52,12 +52,20 @@ const CameraWeather: React.FC = () => {
         <input
           placeholder="Lähtöpiste"
           value={start}
-          onChange={(e) => setStart(e.target.value)}
+          onChange={(e) => {setStart(e.target.value);
+          setData([]);
+          setOpenStation(null);
+          setError(null);
+          }}
         />
         <input
           placeholder="Määränpää"
           value={end}
-          onChange={(e) => setEnd(e.target.value)}
+          onChange={(e) => {setEnd(e.target.value);
+          setData([]);
+          setOpenStation(null);
+          setError(null);
+          }}
         />
         <button onClick={handleSearch} disabled={loading}>
           {loading ? "Haetaan..." : "Hae"}

@@ -68,17 +68,16 @@ function checkIceOnRoad(iceOnRoad: any, warnings: Warning[]){
 export const getWarnings = (data: any): Warning[] => {
     let warnings: Warning[] = [];
     const weather = data.weather[0];
-    checkRoadTemp(weather.road_temp_c, warnings);
-    checkAvGWind(weather.avg_wind_ms, warnings);
-    checkVisibility(weather.visibility_km, warnings);
-    checkWaterOnRoad(weather.water_on_road_mm, warnings);
-    checkSnowOnRoad(weather.snow_on_road_mm, warnings);
-    checkIceOnRoad(weather.ice_on_road_mm, warnings);
+    weather?.road_temp_c != null && checkRoadTemp(weather.road_temp_c, warnings);
+    weather?.avg_wind_ms != null && checkAvGWind(weather.avg_wind_ms, warnings);
+    weather?.visibility_km != null && checkVisibility(weather.visibility_km, warnings);
+    weather?.water_on_road_mm != null && checkWaterOnRoad(weather.water_on_road_mm, warnings);
+    weather?.snow_on_road_mm != null && checkSnowOnRoad(weather.snow_on_road_mm, warnings);
+    weather?.ice_on_road_mm != null && checkIceOnRoad(weather.ice_on_road_mm, warnings);
     return warnings;
 };
 
 export const getBallColor = (warnings: Warning[]) => {
-    console.log(warnings)
     if (warnings.length == 0){
         return "#139649ff"
     }
