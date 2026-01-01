@@ -65,9 +65,20 @@ function checkIceOnRoad(iceOnRoad: any, warnings: Warning[]){
     }
 }
 
+function checkAirTemp(air_temp_c: any, warnings: Warning[]){
+    if (air_temp_c < -30){
+        warnings.push({name: "Pakkasvaroitus", severity: 2, warningText: "Ilman lämpötila alle -30 astetta"});
+    }
+
+    else if(air_temp_c < -25){
+        warnings.push({name: "Pakkasvaroitus", severity: 1, warningText: "Ilman lämpötila alle -25 astetta"});
+    }
+}
+
 export const getWarnings = (data: any): Warning[] => {
     let warnings: Warning[] = [];
     const weather = data.weather[0];
+    weather.air_temp_c != null && checkAirTemp(weather.air_temp_c, warnings);
     weather?.road_temp_c != null && checkRoadTemp(weather.road_temp_c, warnings);
     weather?.avg_wind_ms != null && checkAvGWind(weather.avg_wind_ms, warnings);
     weather?.visibility_km != null && checkVisibility(weather.visibility_km, warnings);
