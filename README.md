@@ -13,10 +13,10 @@ When the user has given a start and an end, the frontend calls the backend and i
 - The backend uses OpenStreetMaps nominatim API that converts the given addresses to coordinates.  
 - After getting the coordinates it uses OpenStreetMaps API to get a route from A to B.
 - After getting the route coordinates it makes a linestring using those route coordinates.
-- Then a PostgreSQL call is made using that linestring to find all weather cameras along the path.
-- And finally all cameras are returned to the frontend.
+- Then a PostgreSQL + PostGIS call is made using that linestring to find all weather cameras along the path.
+- And finally all cameras on path are returned to the frontend.
 
-After that the frontend calls the backend again, to find the closest weather station for each camera on path and to get the weather data.
+After that the frontend calls the backend again, to find the closest weather station for each camera on path and gets the weather data.
 Then all the data is checked for any condition warnings, formatted for display and displayed on the web page.
 
 
