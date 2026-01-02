@@ -98,12 +98,11 @@ def get_camera_weather(camera_geom):
     return weather_data
 
 
-fetch_camera_data
-fetch_station_data
-
 def run_data_fetcher():
     while True:
         fetch_weather_data()
+        fetch_camera_data()
+        fetch_station_data()
         time.sleep(15*60)
 
 thread = threading.Thread(target=run_data_fetcher, daemon=True)
