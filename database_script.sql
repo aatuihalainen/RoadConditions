@@ -2,8 +2,6 @@
 -- PostgreSQL database dump
 --
 
-\restrict i0ES6rB9g37a5dIQT2uhiVQW6Gt8GV30qyOFfaalqhZe8xQFpCVvI1IdYQOCjg9
-
 -- Dumped from database version 18.0
 -- Dumped by pg_dump version 18.0
 
@@ -162,6 +160,4 @@ ALTER TABLE ONLY public.weather_data
 --
 -- PostgreSQL database dump complete
 --
-
-\unrestrict i0ES6rB9g37a5dIQT2uhiVQW6Gt8GV30qyOFfaalqhZe8xQFpCVvI1IdYQOCjg9
 
