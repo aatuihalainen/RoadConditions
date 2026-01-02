@@ -2,7 +2,7 @@
 RoadConditions is a website based project that lets users find on road weather stations and -cameras all around Finland. 
 The user inputs a point A (start address) and a point B (end address), after that the website finds the fastest route from A to B and lists all weather cameras and weather details on route.
 It also warns the user for bad conditions, like snow on the road or low visibility. (The requirements for showing a warning probably require adjusting).
-The website can only be used in finland which is the reason for it being written in Finnish.
+The website can only be used in Finland which is the reason for the website using Finnish language.
 
 ## Used technologies
 PostgreSQL database with PostGIS extension. Python for backend and React for frontend.
